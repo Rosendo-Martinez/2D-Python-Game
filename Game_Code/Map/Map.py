@@ -28,27 +28,19 @@ class Map:
         return [i, j]
 
     def getImportantPointsOnScreen(self):
-        # points relitive to screen origin (top left)
-        # case 1: map is bigger than screen
-        points = [{'x':0,'y':0},{'x':self.screen_width,'y':0}, {'x':0,'y':self.screen_height},{'x':self.screen_width,'y':self.screen_height}]
-        p_x = self.map_width
+        points = []
+        p_x = 0
         p_y = 0
         while (p_x <= self.screen_width and p_y <= self.screen_height):
-            if (p_x == 0):
-                if (p_y == 0 or p_y == self.screen_height):
-                    p_x += self.map_width
-                    continue
-            if (p_x == self.screen_width):
-                if (p_y == 0 or p_y == self.screen_height):
-                    p_x = 0
-                    p_y += self.map_height
-                    continue
             points.append({'x':p_x,'y':p_y})
             p_x += self.map_width
+            if (self.screen_width + self.map_width > p_x and p_x > self.screen_width):
+                p_x = self.screen_width
             if (p_x > self.screen_width):
                 p_x = 0
                 p_y += self.map_height
-
+                if (self.screen_height + self.map_height > p_y and p_y > self.screen_height):
+                    p_y = self.screen_height
         return points
 
     def getMapTopLeftPosRelToBg(self,indicies):

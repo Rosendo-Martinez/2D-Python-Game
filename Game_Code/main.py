@@ -36,20 +36,12 @@ def getMapColor(m,n):
 
 pygame.init()
 
-'''
-Breaks with this params:
-MAP_WIDTH = 30
-MAP_HEIGHT = 30
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
-'''
-
-MAP_WIDTH = 30
-MAP_HEIGHT = 30
+MAP_WIDTH = 1600
+MAP_HEIGHT = 500
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 BackgroundMap = Map(MAP_WIDTH,MAP_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
-SPEED = 3
+SPEED = 10
 
 MAPS = ['black','white']
 
