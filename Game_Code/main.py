@@ -2,10 +2,6 @@ import pygame
 from Game_Code.Map.Map import *
 
 def getMapColor(m,n):
-    # M even,odd is black
-    # M even,even is white
-    # M odd,even is black
-    # M odd,odd white
     sm = -1 if m < 0 else 1
     sn = -1 if n < 0 else 1
     m = math.fabs(m)
@@ -36,12 +32,12 @@ def getMapColor(m,n):
 
 pygame.init()
 
-MAP_WIDTH = 1600
-MAP_HEIGHT = 500
+MAP_WIDTH = 51
+MAP_HEIGHT = 53
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
-BackgroundMap = Map(MAP_WIDTH,MAP_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
-SPEED = 10
+BackgroundMap = Map(MAP_WIDTH, MAP_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
+SPEED = 4
 
 MAPS = ['black','white']
 
@@ -66,14 +62,14 @@ while True:
     if keys[pygame.K_s]:
         screen_rect_rel_bg.top += SPEED
 
-    #screen_rect_rel_bg.left += 200
     screen.fill("purple")
-    for point in BackgroundMap.getImportantPointsOnScreen():
-        map_indicies = BackgroundMap.getMapOn(screen_rect_rel_bg.left + point['x'],screen_rect_rel_bg.top + point['y'])
-        map_tl_pos_rel_bg = BackgroundMap.getMapTopLeftPosRelToBg(map_indicies)
-        map_tl_pos_rel_screen = getRelativePoint(map_tl_pos_rel_bg,{'x':screen_rect_rel_bg.left,'y':screen_rect_rel_bg.top})
-        map_rect = pygame.Rect(map_tl_pos_rel_screen['x'],map_tl_pos_rel_screen['y'],MAP_WIDTH,MAP_HEIGHT)
-        map_color = getMapColor(map_indicies[0],map_indicies[1])
+
+    for point in BackgroundMap.getScreenPoints():
+        map_indices = BackgroundMap.getMapOn(Point(screen_rect_rel_bg.left + point.x, screen_rect_rel_bg.top + point.y))
+        map_tl_pos_rel_bg = BackgroundMap.getMapTopLeftPointRelativeToMapOrigin(map_indices)
+        map_tl_pos_rel_screen = Point(map_tl_pos_rel_bg.x, map_tl_pos_rel_bg.y).getRelativePoint(Point(screen_rect_rel_bg.left, screen_rect_rel_bg.top))
+        map_rect = pygame.Rect(map_tl_pos_rel_screen.x,map_tl_pos_rel_screen.y,MAP_WIDTH,MAP_HEIGHT)
+        map_color = getMapColor(map_indices[0], map_indices[1])
         pygame.draw.rect(screen,map_color,map_rect)
 
     pygame.display.flip()

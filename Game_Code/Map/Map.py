@@ -1,9 +1,15 @@
 import math
 
-def getRelativePoint(p1, p2):
-    # returns p1 relative to p2
-    return {'x':-(p2['x'] - p1['x']), 'y':-(p2['y'] - p1['y'])}
+class Point:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
 
+    def __eq__(self, other):
+        return (self.x == other.x) and (self.y == other.y)
+
+    def getRelativePoint(self,point_relative_to):
+        return Point(-(point_relative_to.x - self.x), -(point_relative_to.y - self.y))
 
 class Map:
     def __init__(self,map_width,map_height,screen_width,screen_height):
@@ -11,28 +17,30 @@ class Map:
         self.map_height = map_height
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.screen_topleft = Point(0,0) # relative to map origin, user uses this to move screen around map
+        self.important_screen_points_rel_screen_origin = self.getScreenPoints() # list of points to place maps on, relative to screen origin
 
-    def getMapOn(self, x, y):
-        if (x == 0):
+    def getMapOn(self, point):
+        if (point.x == 0):
             i = 1
-        elif (x > 0):
-            i = math.ceil(x / self.map_width)
+        elif (point.x > 0):
+            i = math.ceil(point.x / self.map_width)
         else:
-            i = math.floor(x / self.map_width)
-        if (y == 0):
+            i = math.floor(point.x / self.map_width)
+        if (point.y == 0):
             j = 1
-        elif (y > 0):
-            j = math.ceil(y / self.map_height)
+        elif (point.y > 0):
+            j = math.ceil(point.y / self.map_height)
         else:
-            j = math.floor(y / self.map_height)
+            j = math.floor(point.y / self.map_height)
         return [i, j]
 
-    def getImportantPointsOnScreen(self):
+    def getScreenPoints(self):
         points = []
         p_x = 0
         p_y = 0
         while (p_x <= self.screen_width and p_y <= self.screen_height):
-            points.append({'x':p_x,'y':p_y})
+            points.append(Point(p_x,p_y))
             p_x += self.map_width
             if (self.screen_width + self.map_width > p_x and p_x > self.screen_width):
                 p_x = self.screen_width
@@ -43,34 +51,35 @@ class Map:
                     p_y = self.screen_height
         return points
 
-    def getMapTopLeftPosRelToBg(self,indicies):
-        # case 1: -x -y
-        # case 2: -x y
-        # case 3: x -y
-        # case 4: x y
-        if (indicies[0] < 0):
-            if (indicies[1] < 0):
-                return {'x': indicies[0] * self.map_width,
-                        'y': indicies[1] * self.map_height}
+    def getMapTopLeftPointRelativeToMapOrigin(self, map_indices):
+        # returns the coordinates of the top left point on the given map relative to the map origin
+        if (map_indices[0] < 0):
+            if (map_indices[1] < 0):
+                return Point(map_indices[0] * self.map_width,map_indices[1] * self.map_height)
             else:
-                return {'x':indicies[0]*self.map_width,
-                        'y':indicies[1]*self.map_height-self.map_height}
+                return Point(map_indices[0] * self.map_width,map_indices[1] * self.map_height - self.map_height)
         else:
-            if (indicies[1] < 0):
-                return {'x': indicies[0] * self.map_width-self.map_width,
-                        'y': indicies[1] * self.map_height}
+            if (map_indices[1] < 0):
+                return Point(map_indices[0] * self.map_width - self.map_width,map_indices[1] * self.map_height)
             else:
-                return {'x': indicies[0] * self.map_width-self.map_width,
-                        'y': indicies[1] * self.map_height-self.map_height}
+                return Point(map_indices[0] * self.map_width - self.map_width,map_indices[1] * self.map_height - self.map_height)
 
 if __name__ == '__main__':
-    print('getMapOn() tests')
-    myMap = Map(300,300,350,350)
-    print(myMap.getMapOn(2 * myMap.map_width, 3 * myMap.map_height) == [2,3])
-    print(myMap.getMapOn(1.5 * myMap.map_width, 1 * myMap.map_height) == [2,1])
-    print(myMap.getMapOn(-7.8 * myMap.map_width, 1 * myMap.map_height) == [-8,1])
-    print(myMap.getMapOn(-10.1 * myMap.map_width, -12.8 * myMap.map_height) == [-11,-13])
-    print('getRelativePoint test')
-    print(getRelativePoint({'x':0,'y':0},{'x':7,'y':10}) == {'x':-7,'y':-10})
-    print(getRelativePoint({'x': 1, 'y': 1}, {'x': 3, 'y': 2}) == {'x':-2,'y':-1})
-    print(getRelativePoint({'x': -7, 'y': 8}, {'x': 3, 'y': 2}) == {'x':-10,'y':6})
+    myMap = Map(300, 300, 350, 350)
+    print('getMapOn Tests')
+    print(myMap.getMapOn(Point(2 * myMap.map_width, 3 * myMap.map_height)) == [2, 3])
+    print(myMap.getMapOn(Point(1.5 * myMap.map_width, 1 * myMap.map_height)) == [2, 1])
+    print(myMap.getMapOn(Point(-7.8 * myMap.map_width, 1 * myMap.map_height)) == [-8, 1])
+    print(myMap.getMapOn(Point(-10.1 * myMap.map_width, -12.8 * myMap.map_height)) == [-11, -13])
+    print('getRelativePoint Tests')
+    print(Point(0, 0).getRelativePoint(Point(7, 10)) == Point(-7, -10))
+    print(Point(1, 1).getRelativePoint(Point(3, 2)) == Point(-2, -1))
+    print(Point(-7, 8).getRelativePoint(Point(3, 2)) == Point(-10, 6))
+    print('getMapTopLeftPointRelativeToMapOrigin Tests')
+    print(myMap.getMapTopLeftPointRelativeToMapOrigin([1,1]) == Point(0,0))
+    print(myMap.getMapTopLeftPointRelativeToMapOrigin([1,-1]) == Point(0,-myMap.map_height))
+    print(myMap.getMapTopLeftPointRelativeToMapOrigin([-1,1]) == Point(-myMap.map_width,0))
+    print(myMap.getMapTopLeftPointRelativeToMapOrigin([-1,-1]) == Point(-myMap.map_width,-myMap.map_height))
+    map_test_getPoints = Map(50, 50, 100, 100)
+    print('getScreenPoints Tests')
+    print(map_test_getPoints.getScreenPoints() == [Point(0, 0), Point(50, 0), Point(100, 0), Point(0, 50), Point(50, 50), Point(100, 50), Point(0, 100), Point(50, 100), Point(100, 100)])
