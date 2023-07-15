@@ -32,18 +32,16 @@ def getMapColor(m,n):
 
 pygame.init()
 
-MAP_WIDTH = 51
-MAP_HEIGHT = 53
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 800
-BackgroundMap = Map(MAP_WIDTH, MAP_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT)
-SPEED = 4
+MAP_WIDTH = 150
+MAP_HEIGHT = 150
+SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 500
+SPEED = 5
 
 MAPS = ['black','white']
 
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-screen_rect_rel_bg = screen.get_rect()
-
+screen_rect, subMaps = Scroller(SCREEN_WIDTH,SCREEN_HEIGHT,MAP_WIDTH,MAP_HEIGHT)
 clock = pygame.time.Clock()
 
 while True:
@@ -54,23 +52,19 @@ while True:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_a]:
-        screen_rect_rel_bg.left -= SPEED
+        screen_rect.moveBy(-SPEED,0)
     if keys[pygame.K_d]:
-        screen_rect_rel_bg.left += SPEED
+        screen_rect.moveBy(SPEED,0)
     if keys[pygame.K_w]:
-        screen_rect_rel_bg.top -= SPEED
+        screen_rect.moveBy(0,-SPEED)
     if keys[pygame.K_s]:
-        screen_rect_rel_bg.top += SPEED
+        screen_rect.moveBy(0,SPEED)
 
     screen.fill("purple")
-
-    for point in BackgroundMap.getScreenPoints():
-        map_indices = BackgroundMap.getMapOn(Point(screen_rect_rel_bg.left + point.x, screen_rect_rel_bg.top + point.y))
-        map_tl_pos_rel_bg = BackgroundMap.getMapTopLeftPointRelativeToMapOrigin(map_indices)
-        map_tl_pos_rel_screen = Point(map_tl_pos_rel_bg.x, map_tl_pos_rel_bg.y).getRelativePoint(Point(screen_rect_rel_bg.left, screen_rect_rel_bg.top))
-        map_rect = pygame.Rect(map_tl_pos_rel_screen.x,map_tl_pos_rel_screen.y,MAP_WIDTH,MAP_HEIGHT)
-        map_color = getMapColor(map_indices[0], map_indices[1])
-        pygame.draw.rect(screen,map_color,map_rect)
+    for subMap in subMaps:
+        subMapIndices, subMapTopLeftRelativeToScreenTopLeft = subMap.getSubMapData()
+        subMapColor = getMapColor(*subMapIndices)
+        pygame.draw.rect(screen,subMapColor, pygame.Rect(subMapTopLeftRelativeToScreenTopLeft.x,subMapTopLeftRelativeToScreenTopLeft.y,MAP_WIDTH,MAP_HEIGHT))
 
     pygame.display.flip()
     clock.tick(60)
