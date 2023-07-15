@@ -1,5 +1,17 @@
 import math
 
+class Screen:
+    def __init__(self, x, y, width, height):
+        self._point = Point(x,y)
+        self._width = width
+        self._height = height
+    def moveBy(self,x,y):
+        self._point.x += x
+        self._point.y += y
+    def moveTo(self,x,y):
+        self._point.x = x
+        self._point.y = y
+
 class Point:
     def __init__(self,x,y):
         self.x = x
@@ -15,9 +27,7 @@ class Map:
     def __init__(self,map_width,map_height,screen_width,screen_height):
         self.map_width = map_width
         self.map_height = map_height
-        self.screen_width = screen_width
-        self.screen_height = screen_height
-        self.screen_topleft = Point(0,0) # relative to map origin, user uses this to move screen around map
+        self.screen = Screen(0,0,screen_width,screen_height)
         self.important_screen_points_rel_screen_origin = self.getScreenPoints() # list of points to place maps on, relative to screen origin
 
     def getMapOn(self, point):
@@ -39,16 +49,16 @@ class Map:
         points = []
         p_x = 0
         p_y = 0
-        while (p_x <= self.screen_width and p_y <= self.screen_height):
+        while (p_x <= self.screen._width and p_y <= self.screen._height):
             points.append(Point(p_x,p_y))
             p_x += self.map_width
-            if (self.screen_width + self.map_width > p_x and p_x > self.screen_width):
-                p_x = self.screen_width
-            if (p_x > self.screen_width):
+            if (self.screen._width + self.map_width > p_x and p_x > self.screen._width):
+                p_x = self.screen._width
+            if (p_x > self.screen._width):
                 p_x = 0
                 p_y += self.map_height
-                if (self.screen_height + self.map_height > p_y and p_y > self.screen_height):
-                    p_y = self.screen_height
+                if (self.screen._height + self.map_height > p_y and p_y > self.screen._height):
+                    p_y = self.screen._height
         return points
 
     def getMapTopLeftPointRelativeToMapOrigin(self, map_indices):
