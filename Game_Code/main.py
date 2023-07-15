@@ -1,5 +1,5 @@
 import pygame
-from Game_Code.Map.Map import *
+from Game_Code.BackgroundScroller.BackgroundScroller import *
 
 def getMapColor(m,n):
     sm = -1 if m < 0 else 1
