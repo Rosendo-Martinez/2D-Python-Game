@@ -11,6 +11,9 @@ class Screen:
     def moveTo(self,x,y):
         self._point.x = x
         self._point.y = y
+    def restart(self):
+        self._point.x = 0
+        self._point.y = 0
 
 class SubMap:
     def __init__(self, screen, mappedScreenPointRelativeToScreenOrigin, height, width):
@@ -55,6 +58,7 @@ class SubMap:
             j = math.floor(point.y / self._height)
         return (i,j)
 
+
 class Point:
     def __init__(self,x,y):
         self.x = x
@@ -67,6 +71,8 @@ class Point:
         return Point(-(point_relative_to.x - self.x), -(point_relative_to.y - self.y))
     def __add__(self, other):
         return Point(self.x + other.x, self.y + other.y)
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
     def __str__(self):
         return f'Point(x={self.x},y={self.y})'
 
