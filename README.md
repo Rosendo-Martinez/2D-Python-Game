@@ -12,7 +12,7 @@ Tech used:
 
 ## Demo
 
-DEMO HERE
+https://github.com/user-attachments/assets/9aad81e4-d5a7-45d2-81e8-5c6206cff0fd
 
 ## To Play 
 
