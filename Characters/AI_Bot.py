@@ -1,4 +1,4 @@
-from Game_Code.BackgroundScroller.BackgroundScroller import Point
+from BackgroundScroller.BackgroundScroller import Point
 import math
 import time
 

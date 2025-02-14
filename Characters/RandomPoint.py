@@ -1,6 +1,6 @@
 import math
 import random
-from Game_Code.BackgroundScroller.BackgroundScroller import Point
+from BackgroundScroller.BackgroundScroller import Point
 
 
 def RandomPointOnCircleCircumference(inner_radius, point, max_distance=25):

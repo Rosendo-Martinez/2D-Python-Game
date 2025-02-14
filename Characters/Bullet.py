@@ -2,7 +2,7 @@
 import math
 import time
 
-from Game_Code.Characters.Direction import Direction
+from Characters.Direction import Direction
 
 
 class Bullet:

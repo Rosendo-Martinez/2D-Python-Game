@@ -1,10 +1,10 @@
 import time
 import pygame
-from Game_Code.BackgroundScroller.BackgroundScroller import *
-from Game_Code.Characters.Hero import Hero, Direction
-from Game_Code.Characters.AI_Bot import AIBot
-from Game_Code.Characters.Round import Round
-from Game_Code.Leaderboard.Leaderboard import LeaderBoard
+from BackgroundScroller.BackgroundScroller import *
+from Characters.Hero import Hero, Direction
+from Characters.AI_Bot import AIBot
+from Characters.Round import Round
+from Leaderboard.Leaderboard import LeaderBoard
 import os
 
 

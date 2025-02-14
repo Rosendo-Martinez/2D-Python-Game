@@ -1,7 +1,7 @@
-from Game_Code.BackgroundScroller.BackgroundScroller import Point
+from BackgroundScroller.BackgroundScroller import Point
 import math
-from Game_Code.Characters.Bullet import Bullet
-from Game_Code.Characters.Direction import Direction
+from Characters.Bullet import Bullet
+from Characters.Direction import Direction
 import time
 
 

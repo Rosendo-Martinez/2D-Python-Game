@@ -1,7 +1,7 @@
 import time
 
-from Game_Code.Characters.AI_Bot import AIBot
-from Game_Code.Characters.RandomPoint import RandomPointOnCircleCircumference
+from Characters.AI_Bot import AIBot
+from Characters.RandomPoint import RandomPointOnCircleCircumference
 
 class Round:
     def __init__(self,hero, enemy_spawn_radius):
